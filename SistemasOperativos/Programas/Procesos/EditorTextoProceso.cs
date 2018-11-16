@@ -22,9 +22,9 @@ namespace SistemasOperativos.Programas.Procesos
             {
                 EditorTextoInterfaz interfaz = (EditorTextoInterfaz)this.interfaz;
                 interfaz.contenidoTexto.Text = archivoTexto.Contenido;
+
                 interfaz.direccionTexto.Visible = false;
                 interfaz.nombreTexto.Visible = false;
-
             }
         }
 
@@ -38,10 +38,15 @@ namespace SistemasOperativos.Programas.Procesos
         {
             if(archivoTexto == null)
             {
-                archivoTexto = new Archivo(nombre, false, direccion, "Carlos", texto, TipoArchivo.Texto);
+                archivoTexto = new Archivo(nombre, false, direccion, Gestorusuarios.Instancia.UsuarioActivo.Nombre, texto, TipoArchivo.Texto);
 
-                if (!GestorMemoria.Instancia.CrearArchivo(archivoTexto))
+                if (GestorMemoria.Instancia.CrearArchivo(archivoTexto))
                 {
+                    MessageBox.Show("Archivo creado");
+                }
+                else
+                {
+                    MessageBox.Show("No tienes permisos de crear en esa carpeta");
                     archivoTexto = null;
                 }
             }

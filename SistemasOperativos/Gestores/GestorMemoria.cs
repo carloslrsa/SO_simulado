@@ -85,33 +85,39 @@ namespace SistemasOperativos.Gestores
 
         public bool CrearArchivo(Archivo archivo)
         {
-            if (Directory.Exists(DireccionMemoria + "/" + archivo.Direccion))
+            if (archivo.Direccion.Contains(archivo.Usuario))
             {
-                string nombreTotal = DireccionMemoria + "/" + archivo.Direccion + "/" + archivo.Nombre;
-                if (!File.Exists(nombreTotal + ".txt"))
+                if (Directory.Exists(DireccionMemoria + "/" + archivo.Direccion))
                 {
-                    Stream stream = new FileStream(nombreTotal + ".txt", FileMode.Create, FileAccess.Write);
-
-                    formatter.Serialize(stream, archivo);
-                    stream.Close();
-
-                    if(archivo.Tipo == TipoArchivo.Directorio)
+                    string nombreTotal = DireccionMemoria + "/" + archivo.Direccion + "/" + archivo.Nombre;
+                    if (!File.Exists(nombreTotal + ".txt"))
                     {
-                        Directory.CreateDirectory(nombreTotal);
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+                        Stream stream = new FileStream(nombreTotal + ".txt", FileMode.Create, FileAccess.Write);
 
+                        formatter.Serialize(stream, archivo);
+                        stream.Close();
+
+                        if (archivo.Tipo == TipoArchivo.Directorio)
+                        {
+                            Directory.CreateDirectory(nombreTotal);
+                        }
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+                return false;
             }
-            return false;
+            return false;      
         }
 
         public bool ModificarArchivo(Archivo archivo)
         {
-            if (Directory.Exists(DireccionMemoria + "/" + archivo.Direccion))
+            if (Directory.Exists(DireccionMemoria + "/" + Gestorusuarios.Instancia.UsuarioActivo.Nombre + "/" + archivo.Direccion))
             {
                 string nombreTotal = DireccionMemoria + "/" + archivo.Direccion + "/" + archivo.Nombre + ".txt";
                 if (File.Exists(nombreTotal))
@@ -147,6 +153,28 @@ namespace SistemasOperativos.Gestores
             {
                 return null;
             }       
+        }
+
+        public Usuario ObtenerUsuario(string nombre)
+        {
+            string dirInterna = DireccionArchivosInterna + "/" + nombre + ".txt";
+
+            if (File.Exists(dirInterna))
+            {
+                Stream stream = new FileStream(dirInterna, FileMode.Open, FileAccess.Read);
+
+                Archivo ret = (Archivo)formatter.Deserialize(stream);
+
+                stream.Close();
+
+                Usuario reto = new Usuario(ret.Nombre, ret.Usuario);
+
+                return reto;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public bool EliminarArchivo(Archivo archivo)
@@ -208,10 +236,14 @@ namespace SistemasOperativos.Gestores
                 {
                     Stream stream = new FileStream(nombreTotal + ".txt", FileMode.Create, FileAccess.Write);
 
-                    formatter.Serialize(stream, usuario);
+                    Archivo archivoUsuario = new Archivo(usuario.Nombre, true, nombreTotal, usuario.Contrasena, DireccionArchivos + "/" + usuario.Nombre, TipoArchivo.Directorio);
+
+                    formatter.Serialize(stream, archivoUsuario);
                     stream.Close();
 
                     Directory.CreateDirectory(nombreTotal);
+
+                    return true;
                 }
                 else
                 {
@@ -222,6 +254,28 @@ namespace SistemasOperativos.Gestores
             return false;
         }
 
+        public List<Usuario> ObtenerUsuarios()
+        {
+            string dirInterna = DireccionArchivosInterna;
+
+            if (Directory.Exists(dirInterna))
+            {
+                List<Usuario> ret = new List<Usuario>();
+                List<Archivo> arc = new List<Archivo>();
+                foreach (var s in Directory.GetDirectories(dirInterna))
+                {
+                    FileInfo f = new FileInfo(s);
+                    string fname = f.Name;
+                    ret.Add(ObtenerUsuario(f.Name));
+                }
+
+                return ret;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 
 

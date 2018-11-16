@@ -17,7 +17,7 @@ namespace SistemasOperativos
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new EscritorioInterfaz());
+            Application.Run(new inicioSesionInterfaz());
         }
     }
 }

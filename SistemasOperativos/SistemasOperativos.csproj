@@ -89,6 +89,12 @@
     <Compile Include="Gestores\GestorMemoria.cs" />
     <Compile Include="Gestores\GestorProcesos.cs" />
     <Compile Include="Gestores\Gestorusuarios.cs" />
+    <Compile Include="Programas\Interfaces\inicioSesionInterfaz.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Programas\Interfaces\inicioSesionInterfaz.Designer.cs">
+      <DependentUpon>inicioSesionInterfaz.cs</DependentUpon>
+    </Compile>
     <Compile Include="Programas\Procesos\EscritorioProceso.cs" />
     <Compile Include="Programas\Procesos\EditorTextoProceso.cs" />
     <Compile Include="Programas\Interfaces\EscritorioInterfaz.cs">
@@ -131,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Programas\Interfaces\ArchivoInterfaz.resx">
       <DependentUpon>ArchivoInterfaz.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Programas\Interfaces\inicioSesionInterfaz.resx">
+      <DependentUpon>inicioSesionInterfaz.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Programas\Interfaces\ProcesoInterfaz.resx">
       <DependentUpon>ProcesoInterfaz.cs</DependentUpon>

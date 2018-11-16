@@ -107,6 +107,14 @@ namespace SistemasOperativos.Estructuras
             }
         }
 
+        public string Usuario
+        {
+            get
+            {
+                return usuario;
+            }
+        }
+
         public string Contenido
         {
             get
